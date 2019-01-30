@@ -108,16 +108,16 @@ RUN ZENOSSHOME="/home/zenoss" \
     && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/secure_zenoss_ubuntu.sh -P $ZENHOME/bin \
     && chown -c zenoss:zenoss $ZENHOME/bin/secure_zenoss_ubuntu.sh && chmod -c 0700 $ZENHOME/bin/secure_zenoss_ubuntu.sh \
     && sed -i 's/mibs/#mibs/g' /etc/snmp/snmp.conf \
-	&& wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh -P / \
-	&& chown root:root /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh \
+    && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh -P / \
+    && chown root:root /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh \
     && mysqladmin -u root password 'zenoss' \
-	&& zenglobalconf -u zodb-admin-password="zenoss" \
-	&& zenglobalconf -u zep-admin-password="zenoss" \
+    && zenglobalconf -u zodb-admin-password="zenoss" \
+    && zenglobalconf -u zep-admin-password="zenoss" \
     && su -l -c "$ZENHOME/bin/secure_zenoss_ubuntu.sh" zenoss \
-	&& /etc/init.d/mysql stop && sleep 2 \
-	&& /etc/init.d/rabbitmq-server stop && sleep 2 \
-	&& /etc/init.d/memcached stop && sleep 2 \
-	&& /etc/init.d/redis-server stop && sleep 2 \
+    && /etc/init.d/mysql stop && sleep 2 \
+    && /etc/init.d/rabbitmq-server stop && sleep 2 \
+    && /etc/init.d/memcached stop && sleep 2 \
+    && /etc/init.d/redis-server stop && sleep 2 \
     && rm -R $DOWNDIR/* \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
