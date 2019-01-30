@@ -88,17 +88,17 @@ RUN ZENOSSHOME="/home/zenoss" \
     && chmod 755 /etc/init.d/zenoss \
     && update-rc.d zenoss defaults && sleep 2 \
     && echo && touch /etc/insserv/overrides/zenoss \
-    && echo "### BEGIN INIT INFO
-    # Provides: zenoss-stack
-    # Required-Start: $local_fs $network $remote_fs
-    # Required-Stop: $local_fs $network $remote_fs
-    # Should-Start: $all
-    # Should-Stop: $all
-    # Default-Start: 2 3 4 5
-    # Default-Stop: 0 1 6
-    # Short-Description: Start/stop Zenoss-stack
-    # Description: Start/stop Zenoss-stack
-    ### END INIT INFO" > /etc/insserv/overrides/zenoss \
+    && echo "### BEGIN INIT INFO"  > /etc/insserv/overrides/zenoss \
+    && echo "# Provides: zenoss-stack"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Required-Start: $local_fs $network $remote_fs"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Required-Stop: $local_fs $network $remote_fs"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Should-Start: $all"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Should-Stop: $all"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Default-Start: 2 3 4 5"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Default-Stop: 0 1 6"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Short-Description: Start/stop Zenoss-stack"  >> /etc/insserv/overrides/zenoss \
+    && echo "# Description: Start/stop Zenoss-stack"  >> /etc/insserv/overrides/zenoss \
+    && echo "### END INIT INFO"  >> /etc/insserv/overrides/zenoss \
     && echo && chown -c root:zenoss /usr/local/zenoss/bin/pyraw \
     && chown -c root:zenoss /usr/local/zenoss/bin/zensocket \
     && chown -c root:zenoss /usr/local/zenoss/bin/nmap \
