@@ -10,7 +10,7 @@ RUN apt-get update \
     && ZVERb="4.2.5" \
     && ZVERc="2108" \
     && DVER="03c" \
-	&& echo $(grep $(hostname) /etc/hosts | cut -f1) zenoss4-core >> /etc/hosts && hostname zenoss4-core && echo "zenoss4-core" > /etc/hostname \
+    && echo $(grep $(hostname) /etc/hosts | cut -f1) zenoss4-core >> /etc/hosts && hostname zenoss4-core && echo "zenoss4-core" > /etc/hostname \
     && export ZENHOME=/usr/local/zenoss \
     && export PYTHONPATH=/usr/local/zenoss/lib/python \
     && export PATH=/usr/local/zenoss/bin:$PATH \
@@ -111,8 +111,8 @@ RUN ZENOSSHOME="/home/zenoss" \
     && mysqladmin -u root password 'zenoss' \
     && su -l -c "$ZENHOME/bin/secure_zenoss_ubuntu.sh" zenoss \
     && sed -i 's/mibs/#mibs/g' /etc/snmp/snmp.conf \
-	&& wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh -P / \
-	&& chown root:root /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh \
+    && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh -P / \
+    && chown root:root /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh \
     && rm -R $DOWNDIR/* \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
