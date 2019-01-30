@@ -96,8 +96,8 @@ RUN ZENOSSHOME="/home/zenoss" \
     && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/secure_zenoss_ubuntu.sh -P $ZENHOME/bin \
     && chown -c zenoss:zenoss $ZENHOME/bin/secure_zenoss_ubuntu.sh && chmod -c 0700 $ZENHOME/bin/secure_zenoss_ubuntu.sh \
     && sed -i 's/mibs/#mibs/g' /etc/snmp/snmp.conf \
-    && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh -P / \
-    && chown root:root /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh \
+    && cd / && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh \
+    && cd / && chown root:root docker-entrypoint.sh && chmod +x docker-entrypoint.sh \
     && mysqladmin -u root password 'zenoss' \
     && zenglobalconf -u zodb-admin-password="zenoss" \
     && zenglobalconf -u zep-admin-password="zenoss" \
