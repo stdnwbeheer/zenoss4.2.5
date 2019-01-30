@@ -14,6 +14,12 @@ cleanup() {
 trap 'cleanup' SIGTERM
 
 #Start container procedure
+if [ ! -f /firstrun ]; then
+    rabbitmqctl add_user zenoss zenoss
+    rabbitmqctl add_vhost /zenoss
+    rabbitmqctl set_permissions -p /zenoss zenoss '.*' '.*' '.*' && echo
+    touch /firstrun
+fi
 /etc/init.d/memcached start && sleep 2
 /etc/init.d/redis-server start && sleep 2
 /etc/init.d/rabbitmq-server start && sleep 2
