@@ -10,7 +10,7 @@ RUN apt-get update \
     && ZVERb="4.2.5" \
     && ZVERc="2108" \
     && DVER="03c" \
-    && echo $(grep $(hostname) /etc/hosts | cut -f1) zenoss4-core >> /etc/hosts && hostname zenoss4-core && echo "zenoss4-core" > /etc/hostname \
+    && echo $(grep $(hostname) /etc/hosts | cut -f1) zenoss4-core >> /etc/hosts && echo "zenoss4-core" > /etc/hostname \
     && export ZENHOME=/usr/local/zenoss \
     && export PYTHONPATH=/usr/local/zenoss/lib/python \
     && export PATH=/usr/local/zenoss/bin:$PATH \
