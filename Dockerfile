@@ -3,7 +3,7 @@ FROM ubuntu:14.04
 # Maintainer of the Dockerfile
 MAINTAINER netwerkbeheer <netwerkbeheer@staedion.nl>
 # Run the whole set of installations.
-RUN && ZENOSSHOME="/home/zenoss" \
+RUN ZENOSSHOME="/home/zenoss" \
     && DOWNDIR="/tmp" \
     && ZVER="425" \
     && ZVERb="4.2.5" \
