@@ -2,9 +2,7 @@
 FROM ubuntu:14.04
 # Maintainer of the Dockerfile
 MAINTAINER netwerkbeheer <netwerkbeheer@staedion.nl>
-# Begin first set of installations.
-# This ends with an MySQL import error,
-# so it is split in two run commands.
+# Run the whole set of installations.
 RUN && ZENOSSHOME="/home/zenoss" \
     && DOWNDIR="/tmp" \
     && ZVER="425" \
@@ -39,19 +37,7 @@ RUN && ZENOSSHOME="/home/zenoss" \
     && mysql -u$MYSQLUSER -e "create database zodb" \
     && mysql -u$MYSQLUSER -e "create database zodb_session" \
     && echo && echo "...The 1305 MySQL import error below is safe to ignore" \
-    && mysql -u$MYSQLUSER zenoss_zep < $ZENOSSHOME/zenoss_zep.sql
-# Second installation and configuration sequence
-RUN ZENOSSHOME="/home/zenoss" \
-    && DOWNDIR="/tmp" \
-    && ZVER="425" \
-    && ZVERb="4.2.5" \
-    && ZVERc="2108" \
-    && DVER="03c" \
-    && export ZENHOME=/usr/local/zenoss \
-    && export PYTHONPATH=/usr/local/zenoss/lib/python \
-    && export PATH=/usr/local/zenoss/bin:$PATH \
-    && export INSTANCE_HOME=$ZENHOME \
-    && MYSQLUSER="root" \
+    && mysql -u$MYSQLUSER zenoss_zep < $ZENOSSHOME/zenoss_zep.sql || true \
     && mysql -u$MYSQLUSER zodb < $ZENOSSHOME/zodb.sql \
     && mysql -u$MYSQLUSER zodb_session < $ZENOSSHOME/zodb_session.sql \
     && mysql -u$MYSQLUSER -e "CREATE USER 'zenoss'@'localhost' IDENTIFIED BY  'zenoss';" \
