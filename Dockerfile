@@ -1,7 +1,10 @@
+# Use Ubuntu 14.04 as base image
 FROM ubuntu:14.04
-
-MAINTAINER Jeroen Twilt <jt@staedion.nl>
-
+# Maintainer of the Dockerfile
+MAINTAINER netwerkbeheer <netwerkbeheer@staedion.nl>
+# Begin first set of installations.
+# This ends with an MySQL import error,
+# so it is split in two run commands.
 RUN apt-get update \
     && apt-get -y install git wget \
     && ZENOSSHOME="/home/zenoss" \
@@ -38,7 +41,7 @@ RUN apt-get update \
     && mysql -u$MYSQLUSER -e "create database zodb_session" \
     && echo && echo "...The 1305 MySQL import error below is safe to ignore" \
     && mysql -u$MYSQLUSER zenoss_zep < $ZENOSSHOME/zenoss_zep.sql
-    
+# Second installation and configuration sequence
 RUN ZENOSSHOME="/home/zenoss" \
     && DOWNDIR="/tmp" \
     && ZVER="425" \
@@ -122,7 +125,7 @@ RUN ZENOSSHOME="/home/zenoss" \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
     && apt-get -y clean
-
+# Expose port 8080 to the host to see ZenOSS web interface
 EXPOSE 8080
-
+# This container is started default with the docker-enrtypoint.sh script.
 ENTRYPOINT ["/docker-entrypoint.sh"]
