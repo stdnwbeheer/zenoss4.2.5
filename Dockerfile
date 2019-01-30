@@ -31,7 +31,7 @@ RUN apt-get update \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install mysql-server mysql-client mysql-common \
     && apt-get -f install \
-    && wget -N https://sourceforge.net/projects/zenossforubuntu/files/zenoss-core-425-2108_03c_amd64.deb -P $DOWNDIR/ \
+    && wget -N https://sourceforge.net/projects/zenossforubuntu/files/zenoss-core-425-2108_03c_amd64.deb/download -P $DOWNDIR/ \
     && dpkg -i $DOWNDIR/zenoss-core-425-2108_03c_amd64.deb \
     && chown -R zenoss:zenoss $ZENHOME && chown -R zenoss:zenoss $ZENOSSHOME \
     && /etc/init.d/mysql start && sleep 2 \
