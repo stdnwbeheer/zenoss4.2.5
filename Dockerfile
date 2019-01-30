@@ -107,6 +107,9 @@ RUN ZENOSSHOME="/home/zenoss" \
     && /etc/init.d/memcached stop && sleep 2 \
     && /etc/init.d/redis-server stop && sleep 2 \
     && rm -R $DOWNDIR/* \
+    && rm /var/lib/mysql/ibdata1 \
+    && rm /var/lib/mysql/ib_logfile0 \
+    && rm /var/lib/mysql/ib_logfile1 \
     && apt-get -y purge wget \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
