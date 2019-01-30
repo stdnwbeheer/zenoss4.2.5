@@ -110,6 +110,7 @@ RUN ZENOSSHOME="/home/zenoss" \
     && rm /var/lib/mysql/ibdata1 \
     && rm /var/lib/mysql/ib_logfile0 \
     && rm /var/lib/mysql/ib_logfile1 \
+    && rm /var/log/rabbitmq/*.log \
     && apt-get -y purge wget \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
