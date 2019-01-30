@@ -5,9 +5,7 @@ MAINTAINER netwerkbeheer <netwerkbeheer@staedion.nl>
 # Begin first set of installations.
 # This ends with an MySQL import error,
 # so it is split in two run commands.
-RUN apt-get update \
-    && apt-get -y install git wget \
-    && ZENOSSHOME="/home/zenoss" \
+RUN && ZENOSSHOME="/home/zenoss" \
     && DOWNDIR="/tmp" \
     && ZVER="425" \
     && ZVERb="4.2.5" \
@@ -21,7 +19,8 @@ RUN apt-get update \
     && useradd -m -U -s /bin/bash zenoss \
     && mkdir $ZENOSSHOME/zenoss$ZVER-srpm_install \
     && mkdir $ZENHOME && chown -cR zenoss:zenoss $ZENHOME \
-    && apt-get -y install software-properties-common python-software-properties libpangocairo-1.0-0 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libgconf2-4 libasound2 libatk1.0-0 libgtk-3-0 libxslt-dev snmp build-essential rrdtool libmysqlclient-dev nagios-plugins erlang subversion autoconf swig unzip zip g++ libssl-dev maven libmaven-compiler-plugin-java build-essential \
+    && apt-get update \
+    && apt-get -y install wget software-properties-common python-software-properties libpangocairo-1.0-0 libx11-xcb1 libxcomposite1 libxcursor1 libxdamage1 libxi6 libxtst6 libnss3 libcups2 libxss1 libxrandr2 libgconf2-4 libasound2 libatk1.0-0 libgtk-3-0 libxslt-dev snmp build-essential rrdtool libmysqlclient-dev nagios-plugins erlang subversion autoconf swig unzip zip g++ libssl-dev maven libmaven-compiler-plugin-java build-essential \
     && echo | add-apt-repository ppa:webupd8team/java && sleep 1 && apt-get update \
     && echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections \
     && apt-get -y install libxml2-dev libxslt1-dev libldap2-dev libsasl2-dev oracle-java8-installer python-twisted python-gnutls python-twisted-web python-samba libsnmp-base snmp-mibs-downloader bc rpm2cpio memcached libncurses5 libncurses5-dev libreadline6-dev libreadline6 librrd-dev python-setuptools python-dev erlang-nox redis-server \
@@ -122,6 +121,7 @@ RUN ZENOSSHOME="/home/zenoss" \
     && /etc/init.d/memcached stop && sleep 2 \
     && /etc/init.d/redis-server stop && sleep 2 \
     && rm -R $DOWNDIR/* \
+    && apt-get -y purge wget \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
     && apt-get -y clean
