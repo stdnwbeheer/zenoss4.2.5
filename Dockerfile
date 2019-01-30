@@ -38,7 +38,7 @@ RUN apt-get update \
     && mysql -u$MYSQLUSER -e "create database zodb_session" \
     && echo && echo "...The 1305 MySQL import error below is safe to ignore" \
     && mysql -u$MYSQLUSER zenoss_zep < $ZENOSSHOME/zenoss_zep.sql
-
+    
 RUN ZENOSSHOME="/home/zenoss" \
     && DOWNDIR="/tmp" \
     && ZVER="425" \
@@ -64,7 +64,6 @@ RUN ZENOSSHOME="/home/zenoss" \
     && mysql -u$MYSQLUSER -e "GRANT ALL PRIVILEGES ON zenoss_zep.* TO 'zenoss'@'%';" \
     && mysql -u$MYSQLUSER -e "GRANT ALL PRIVILEGES ON zodb_session.* TO 'zenoss'@'%';" \
     && mysql -u$MYSQLUSER -e "GRANT SELECT ON mysql.proc TO 'zenoss'@'%';" \
-    && rm $ZENOSSHOME/*.sql && echo \
     && wget -N http://www.rabbitmq.com/releases/rabbitmq-server/v3.3.0/rabbitmq-server_3.3.0-1_all.deb -P $DOWNDIR/ \
     && dpkg -i $DOWNDIR/rabbitmq-server_3.3.0-1_all.deb \
     && chown -R zenoss:zenoss $ZENHOME && echo \
@@ -106,13 +105,19 @@ RUN ZENOSSHOME="/home/zenoss" \
     && chmod -c 04750 /usr/local/zenoss/bin/pyraw \
     && chmod -c 04750 /usr/local/zenoss/bin/zensocket \
     && chmod -c 04750 /usr/local/zenoss/bin/nmap && echo \
-    && wget --no-check-certificate -N https://raw.githubusercontent.com/JeroTwi/zenoss/master/core-autodeploy/$ZVERb/misc/secure_zenoss_ubuntu.sh -P $ZENHOME/bin \
+    && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/secure_zenoss_ubuntu.sh -P $ZENHOME/bin \
     && chown -c zenoss:zenoss $ZENHOME/bin/secure_zenoss_ubuntu.sh && chmod -c 0700 $ZENHOME/bin/secure_zenoss_ubuntu.sh \
-    && mysqladmin -u root password 'zenoss' \
-    && su -l -c "$ZENHOME/bin/secure_zenoss_ubuntu.sh" zenoss \
     && sed -i 's/mibs/#mibs/g' /etc/snmp/snmp.conf \
-    && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh -P / \
-    && chown root:root /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh \
+	&& wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh -P / \
+	&& chown root:root /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh \
+    && mysqladmin -u root password 'zenoss' \
+	&& zenglobalconf -u zodb-admin-password="zenoss" \
+	&& zenglobalconf -u zep-admin-password="zenoss" \
+    && su -l -c "$ZENHOME/bin/secure_zenoss_ubuntu.sh" zenoss \
+	&& /etc/init.d/mysql stop && sleep 2 \
+	&& /etc/init.d/rabbitmq-server stop && sleep 2 \
+	&& /etc/init.d/memcached stop && sleep 2 \
+	&& /etc/init.d/redis-server stop && sleep 2 \
     && rm -R $DOWNDIR/* \
     && apt-get -y autoremove \
     && apt-get -y autoclean \
