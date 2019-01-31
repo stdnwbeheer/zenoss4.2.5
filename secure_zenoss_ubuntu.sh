@@ -173,3 +173,4 @@ fi
 
 zenoss stop
 zenchkrels --repair
+zenoss start
