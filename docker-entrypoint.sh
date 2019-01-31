@@ -20,7 +20,7 @@ trap 'cleanup' SIGTERM
 if [ ! -f /firstrun ]; then
     rabbitmqctl add_user zenoss zenoss
     rabbitmqctl add_vhost /zenoss
-    rabbitmqctl set_permissions -p /zenoss zenoss '.*' '.*' '.*' && echo
+    rabbitmqctl set_permissions -p /zenoss zenoss '.*' '.*' '.*'
     touch /firstrun
 fi
 /etc/init.d/mysql start && sleep 2
