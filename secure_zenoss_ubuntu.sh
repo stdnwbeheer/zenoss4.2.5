@@ -92,6 +92,77 @@ then
     sed -i "s/admin:.*/admin:${RANDOM_PASSWORD}/" $ZENHOME/etc/hubpasswd
 fi
 
+
+### ZEN-????: Zenoss install should help secure MySQL root user ###############
+
+MYSQL_ADMIN_PASSWORD=$(zenglobalconf -p zodb-admin-password)
+if [ -z "$(zenglobalconf -p zodb-admin-password)" ]
+then
+    if mysql -uroot mysql -e "select 1" >/dev/null 2>&1
+    then
+        echo "MySQL is configured with a blank root password."
+
+            printf "Configure a secure MySQL root password? [Yn]: "
+            read YESNO
+
+            if echo "$YESNO" | egrep -iq Y
+            then
+                while [ 1 ]
+                do
+                    printf "  Enter new MySQL root password: "
+                    stty -echo ; read MYSQL_ROOT_PASSWORD_1 ; stty echo
+                    echo
+
+                    printf "Confirm new MySQL root password: "
+                    stty -echo ; read MYSQL_ROOT_PASSWORD_2 ; stty echo
+                    echo
+
+                    if [ -z "$MYSQL_ROOT_PASSWORD_1" ]
+                    then
+                        echo "A blank password is not acceptable."
+                        continue
+                    fi
+
+                    if [ "$MYSQL_ROOT_PASSWORD_1" != "$MYSQL_ROOT_PASSWORD_2" ]
+                    then
+                        echo "Passwords don't match. Try again."
+                        continue
+                    fi
+
+                    break
+                done
+
+                echo "Changing MySQL root password."
+                mysqladmin -uroot -h localhost password "$MYSQL_ROOT_PASSWORD_1"
+
+                for ROOT_PWD_PROP in zodb-admin-password zep-admin-password
+                do
+                    echo "Assigning MySQL root password for global.conf:$ROOT_PWD_PROP"
+                    zenglobalconf -u $ROOT_PWD_PROP="$MYSQL_ROOT_PASSWORD_1"
+                done
+
+        fi
+
+    # Using a blank MySQL root password failed.
+    else
+        echo "Zenoss needs root MySQL access to create its databases."
+
+        if [ -t 1 ]
+        then
+            printf "Enter the MySQL root user password: "
+            stty -echo ; read MYSQL_ROOT_PASSWORD ; stty echo
+            echo
+
+            for ROOT_PWD_PROP in zodb-admin-password zep-admin-password
+            do
+                echo "Assigning MySQL root password for global.conf:$ROOT_PWD_PROP"
+                zenglobalconf -u $ROOT_PWD_PROP="$MYSQL_ROOT_PASSWORD"
+            done
+        fi
+    fi
+fi
+
+
 ### ZEN-1847: Restrict zeneventserver to only listen on 127.0.0.1 #############
 
 if ! grep -q 'Djetty.host=localhost' ~/.bashrc
