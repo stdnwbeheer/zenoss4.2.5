@@ -102,6 +102,7 @@ RUN ZENOSSHOME="/home/zenoss" \
     && zenglobalconf -u zodb-admin-password="zenoss" \
     && zenglobalconf -u zep-admin-password="zenoss" \
     && su -l -c "$ZENHOME/bin/secure_zenoss_ubuntu.sh" zenoss \
+    && /etc/init.d/zenoss stop && sleep 2 \
     && /etc/init.d/mysql stop && sleep 2 \
     && /etc/init.d/rabbitmq-server stop && sleep 2 \
     && /etc/init.d/memcached stop && sleep 2 \
