@@ -17,14 +17,14 @@ trap 'cleanup' SIGTERM
 /etc/init.d/memcached start && sleep 2
 /etc/init.d/redis-server start && sleep 2
 /etc/init.d/rabbitmq-server start && sleep 2
-/etc/init.d/mysql start && sleep 2
-/etc/init.d/zenoss start && sleep 5
 if [ ! -f /firstrun ]; then
     rabbitmqctl add_user zenoss zenoss
     rabbitmqctl add_vhost /zenoss
     rabbitmqctl set_permissions -p /zenoss zenoss '.*' '.*' '.*'
     touch /firstrun
 fi
+/etc/init.d/mysql start && sleep 2
+/etc/init.d/zenoss start && sleep 5
 tail -f /dev/null &
 
 #Wait
