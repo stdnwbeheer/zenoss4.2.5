@@ -2,6 +2,10 @@
 FROM ubuntu:14.04
 # Maintainer of the Dockerfile
 MAINTAINER netwerkbeheer <netwerkbeheer@staedion.nl>
+# Set some environment variables.
+ENV MYSQLHOST="zenoss-mysql"
+ENV MYSQLROOTPW="zenoss"
+ENV MYSQLUSERPW="zenoss"
 # Run the whole set of installations.
 RUN ZENOSSHOME="/home/zenoss" \
     && DOWNDIR="/tmp" \
@@ -73,8 +77,8 @@ RUN ZENOSSHOME="/home/zenoss" \
     && sed -i 's/mibs/#mibs/g' /etc/snmp/snmp.conf \
     && cd / && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh \
     && cd / && chown root:root docker-entrypoint.sh && chmod +x docker-entrypoint.sh \
-    && zenglobalconf -u zodb-admin-password="zenoss" \
-    && zenglobalconf -u zep-admin-password="zenoss" \
+    && zenglobalconf -u zodb-admin-password=${MYSQLROOTPW} \
+    && zenglobalconf -u zep-admin-password=${MYSQLROOTPW} \
     && su -l -c "$ZENHOME/bin/secure_zenoss_ubuntu.sh" zenoss \
     && /etc/init.d/rabbitmq-server stop && sleep 2 \
     && /etc/init.d/memcached stop && sleep 2 \
