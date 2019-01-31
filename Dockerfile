@@ -52,7 +52,7 @@ RUN ZENOSSHOME="/home/zenoss" \
     && mysql -u$MYSQLUSER -e "GRANT ALL PRIVILEGES ON zenoss_zep.* TO 'zenoss'@'%';" \
     && mysql -u$MYSQLUSER -e "GRANT ALL PRIVILEGES ON zodb_session.* TO 'zenoss'@'%';" \
     && mysql -u$MYSQLUSER -e "GRANT SELECT ON mysql.proc TO 'zenoss'@'%';" \
-    && wget -N http://www.rabbitmq.com/releases/rabbitmq-server/v3.3.0/rabbitmq-server_3.3.0-1_all.deb -P $DOWNDIR/ \
+    && wget -N https://github.com/stdnwbeheer/zenoss4.2.5-withSQL/raw/master/deps/rabbitmq-server_3.3.0-1_all.deb -P $DOWNDIR/ \
     && dpkg -i $DOWNDIR/rabbitmq-server_3.3.0-1_all.deb \
     && chown -R zenoss:zenoss $ZENHOME && echo \
     && /etc/init.d/rabbitmq-server start && sleep 2\
@@ -61,7 +61,7 @@ RUN ZENOSSHOME="/home/zenoss" \
     && rabbitmqctl set_permissions -p /zenoss zenoss '.*' '.*' '.*' && echo \
     && cd /usr/local/zenoss/lib/python/pynetsnmp \
     && mv netsnmp.py netsnmp.py.orig \
-    && wget https://raw.github.com/hydruid/zenoss/master/core-autodeploy/4.2.5/misc/netsnmp.py \
+    && wget https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5-withSQL/master/deps/netsnmp.py \
     && chown zenoss:zenoss netsnmp.py \
     && echo && ln -s /usr/local/zenoss /opt \
     && apt-get install libssl1.0.0 libssl-dev -y \
@@ -71,7 +71,7 @@ RUN ZENOSSHOME="/home/zenoss" \
     && chmod +x /usr/local/zenoss/zenup/bin/zenup \
     && echo 'watchdog True' >> $ZENHOME/etc/zenwinperf.conf \
     && touch $ZENHOME/var/Data.fs && echo \
-    && wget --no-check-certificate -N https://raw.githubusercontent.com/JeroTwi/zenoss/master/core-autodeploy/$ZVERb/misc/zenoss -P $DOWNDIR/ \
+    && wget -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5-withSQL/master/deps/zenoss -P $DOWNDIR/ \
     && cp $DOWNDIR/zenoss /etc/init.d/zenoss \
     && chmod 755 /etc/init.d/zenoss \
     && update-rc.d zenoss defaults && sleep 2 \
@@ -93,10 +93,10 @@ RUN ZENOSSHOME="/home/zenoss" \
     && chmod -c 04750 /usr/local/zenoss/bin/pyraw \
     && chmod -c 04750 /usr/local/zenoss/bin/zensocket \
     && chmod -c 04750 /usr/local/zenoss/bin/nmap && echo \
-    && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/secure_zenoss_ubuntu.sh -P $ZENHOME/bin \
+    && wget -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5-withSQL/master/deps/secure_zenoss_ubuntu.sh -P $ZENHOME/bin \
     && chown -c zenoss:zenoss $ZENHOME/bin/secure_zenoss_ubuntu.sh && chmod -c 0700 $ZENHOME/bin/secure_zenoss_ubuntu.sh \
     && sed -i 's/mibs/#mibs/g' /etc/snmp/snmp.conf \
-    && cd / && wget --no-check-certificate -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5/master/docker-entrypoint.sh \
+    && cd / && wget -N https://raw.githubusercontent.com/stdnwbeheer/zenoss4.2.5-withSQL/master/deps/docker-entrypoint.sh \
     && cd / && chown root:root docker-entrypoint.sh && chmod +x docker-entrypoint.sh \
     && mysqladmin -u root password 'zenoss' \
     && zenglobalconf -u zodb-admin-password="zenoss" \
