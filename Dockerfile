@@ -107,7 +107,6 @@ RUN ZENOSSHOME="/home/zenoss" \
     && /etc/init.d/rabbitmq-server stop && sleep 2 \
     && /etc/init.d/memcached stop && sleep 2 \
     && /etc/init.d/redis-server stop && sleep 2 \
-    && rm -R $DOWNDIR/* \
     && rm /var/log/rabbitmq/*.log \
     && apt-get -y purge wget \
     && apt-get -y autoremove \
